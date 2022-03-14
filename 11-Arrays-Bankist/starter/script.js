@@ -525,7 +525,7 @@ const dogs = [
 ];
 
 GOOD LUCK 😀
-*/
+
 
 const dogs = [
   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
@@ -580,3 +580,4 @@ const dogsSorted = dogs
   .slice()
   .sort((a, b) => a.recomendedFood - b.recomendedFood);
 console.log(dogsSorted);
+*/
