@@ -184,14 +184,37 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = function () {
+
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = '';
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  }
+
+  let time = 30;
+
+  tick();
+  const timer = setInterval(tick, 1000);
+
+  return timer;
+}
+
+
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
 // FAKE AWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+//currentAccount = account1;
+//updateUI(currentAccount);
+//containerApp.style.opacity = 100;
 
 // Create current date and time
 const now = new Date();
@@ -201,6 +224,7 @@ const now = new Date();
 // const hour = `${now.getHours()}`.padStart(2, 0);
 // const min = `${now.getMinutes()}`.padStart(2, 0);
 // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+/*
 const options = {
   hour: 'numeric',
   minute: 'numeric',
@@ -213,6 +237,7 @@ labelDate.textContent = new Intl.DateTimeFormat(
   currentAccount.locale,
   options
 ).format(now);
+*/
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -248,6 +273,9 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -278,6 +306,10 @@ btnTransfer.addEventListener('click', function (e) {
     // Update UI
     updateUI(currentAccount);
   }
+
+  // Reset timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 btnLoan.addEventListener('click', function (e) {
@@ -298,6 +330,10 @@ btnLoan.addEventListener('click', function (e) {
 
   }
   inputLoanAmount.value = '';
+
+  // Reset timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 btnClose.addEventListener('click', function (e) {
