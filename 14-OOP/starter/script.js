@@ -1,6 +1,6 @@
 'use strict';
 
-
+/*
 ///////////////////////////////////////
 // Constructor Functions and the new Operator
 const Person = function (firstName, birthYear) {
@@ -15,7 +15,7 @@ const Person = function (firstName, birthYear) {
 };
 
 const jonas = new Person('Jonas', 1991);
-console.log(jonas);
+// console.log(jonas);
 
 // 1. New {} is created
 // 2. function is called, this = {}
@@ -25,39 +25,39 @@ console.log(jonas);
 const matilda = new Person('Matilda', 2017);
 const jack = new Person('Jack', 1975);
 
-console.log(jonas instanceof Person);
+// console.log(jonas instanceof Person);
 
 Person.hey = function () {
-    console.log('Hey there 👋');
-    console.log(this);
+    // console.log('Hey there 👋');
+    // console.log(this);
 };
 Person.hey();
 
 ///////////////////////////////////////
 // Prototypes
-console.log(Person.prototype);
+// console.log(Person.prototype);
 
 Person.prototype.calcAge = function () {
-    console.log(2037 - this.birthYear);
+    // console.log(2037 - this.birthYear);
 };
 
 jonas.calcAge();
 matilda.calcAge();
 
-console.log(jonas.__proto__);
-console.log(jonas.__proto__ === Person.prototype);
+// console.log(jonas.__proto__);
+// console.log(jonas.__proto__ === Person.prototype);
 
-console.log(Person.prototype.isPrototypeOf(jonas));
-console.log(Person.prototype.isPrototypeOf(matilda));
-console.log(Person.prototype.isPrototypeOf(Person));
+// console.log(Person.prototype.isPrototypeOf(jonas));
+// console.log(Person.prototype.isPrototypeOf(matilda));
+// console.log(Person.prototype.isPrototypeOf(Person));
 
 // .prototyeOfLinkedObjects
 
 Person.prototype.species = 'Homo Sapiens';
-console.log(jonas.species, matilda.species);
+// console.log(jonas.species, matilda.species);
 
-console.log(jonas.hasOwnProperty('firstName'));
-console.log(jonas.hasOwnProperty('species'));
+// console.log(jonas.hasOwnProperty('firstName'));
+// console.log(jonas.hasOwnProperty('species'));
 
 ////////////////////////////
 /* Coding Challenge #1
@@ -66,6 +66,7 @@ console.log(jonas.hasOwnProperty('species'));
 3. Implement a 'brake' method that will decrease the car's speed by 5, and log the new speed to the console;
 4. Create 2 car objects and experiment with calling 'accelerate' and 'brake' multiple times on each of them.
 */
+/*
 const Car = function (make, speed) {
     this.make = make;
     this.speed = speed;
@@ -84,11 +85,11 @@ Car.prototype.brake = function () {
 const car1 = new Car('BMW', 120);
 const car2 = new Car('Mercedes', 95);
 
-car1.accelerate();
-car1.brake();
-car2.brake();
-car2.accelerate();
-
+// car1.accelerate();
+// car1.brake();
+// car2.brake();
+// car2.accelerate();
+*/
 ////////////////////////////
 /* Coding Challenge #2
 
@@ -99,7 +100,7 @@ car2.accelerate();
 
 DATA CAR 1: 'Ford' going at 120 km/h
 
-*/
+
 
 class CarCl {
     constructor(make, speed) {
@@ -127,9 +128,64 @@ class CarCl {
 }
 
 const ford = new CarCl('Ford', 120)
-console.log(ford.speedUS);
-ford.accelerate();
-ford.accelerate();
-ford.brake();
-ford.speedUS = 50;
-console.log(ford);
+//console.log(ford.speedUS);
+//ford.accelerate();
+//ford.accelerate();
+//ford.brake();
+//ford.speedUS = 50;
+//console.log(ford);
+
+// Inheritance between "classes" => constructor functions
+///////////////////////////////////////
+// Coding Challenge #3
+
+/*
+1. Use a constructor function to implement an Electric Car (called EV) as a CHILD "class" of Car. Besides a make and current speed, the EV also has the current battery charge in % ('charge' property);
+2. Implement a 'chargeBattery' method which takes an argument 'chargeTo' and sets the battery charge to 'chargeTo';
+3. Implement an 'accelerate' method that will increase the car's speed by 20, and decrease the charge by 1%. Then log a message like this: 'Tesla going at 140 km/h, with a charge of 22%';
+4. Create an electric car object and experiment with calling 'accelerate', 'brake' and 'chargeBattery' (charge to 90%). Notice what happens when you 'accelerate'! HINT: Review the definiton of polymorphism 😉
+
+DATA CAR 1: 'Tesla' going at 120 km/h, with a charge of 23%
+*/
+
+const Car = function (make, speed) {
+    this.make = make;
+    this.speed = speed;
+}
+
+Car.prototype.accelerate = function () {
+    this.speed += 20;
+    console.log(`${this.make} going at ${this.speed} km/h, with a charge of ${this.charge}%`);
+}
+
+Car.prototype.brake = function () {
+    this.speed -= 5;
+    console.log(`${this.make} going at ${this.speed} km/h, with a charge of ${this.charge}%`);
+}
+
+
+const EV = function (make, speed, charge) {
+    Car.call(this, make, speed);
+    this.charge = charge;
+}
+
+// link the prototypes
+EV.prototype = Object.create(Car.prototype);
+
+EV.prototype.chargeBattery = function (chargeTo) {
+    this.charge = chargeTo;
+}
+
+EV.prototype.accelerate = function () {
+    this.speed += 20;
+    this.charge--;
+    console.log(`${this.make} going at ${this.speed} km/h, with a charge of ${this.charge}%`);
+}
+
+const tesla = new EV('Tesla', 120, 23);
+tesla.chargeBattery(90);
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.brake();
