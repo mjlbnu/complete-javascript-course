@@ -4,6 +4,6 @@
   box-sizing: border-box;
 }
 
-.cards-container {
-  background: linear-gradient(260deg, #9b6c50 0%, #4f2626 100%);
+.hidden {
+  display: none;
 }
